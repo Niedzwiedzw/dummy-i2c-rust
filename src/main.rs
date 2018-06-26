@@ -12,13 +12,17 @@ fn tick() {
     thread::sleep(time::Duration::from_millis(TICK as u64));
 }
 
-fn read_bit(register: *mut u8, pin_num: u8) -> u8 {
-    let mask = (1 as u8) << pin_num;
+fn read_bit(byte: u8, position: u8) -> u8 {
+    let mask = (1 as u8) << position;
+    (byte&mask) >> position
+}
+
+fn read_bit_from_register(register: *mut u8, pin_num: u8) -> u8 {
     let state: u8;
     unsafe {
         state = read_volatile(register);
     };
-    (state&mask) >> pin_num
+    read_bit(state, pin_num)
 }
 
 fn write_bit(register: *mut u8, pin_num: u8, value: u8) {
@@ -38,7 +42,7 @@ fn read_pin(pin_num: u8) -> u8 {
     let portb: *mut u8;
     unsafe { portb = &mut PORTB as *mut u8; }
 
-    read_bit(portb, pin_num)
+    read_bit_from_register(portb, pin_num)
 }
 
 fn print_state() {
@@ -47,13 +51,19 @@ fn print_state() {
 
     println!("PORTB: {}    Data Direction Registry (DDRDB): {}",
              (0..8).map(|i| read_pin(i).to_string()).collect::<String>(),
-             (0..8).map(|i| read_bit(ddrdb, i).to_string()).collect::<String>(),
+             (0..8).map(|i| read_bit_from_register(ddrdb, i).to_string()).collect::<String>(),
     );
+}
+
+fn add_data_to_buffer(byte: u8, buffer: &Vec<u8>) {
+    let mask: u8 = 1;
+
 }
 
 fn main() {
     let portb: *mut u8;
-    unsafe { portb = &mut PORTB as *mut u8; }
+    unsafe { portb = &mut PORTB as *mut u8; };
+    let buffer: Vec<u8> = vec!();
 
 
     print_state();
