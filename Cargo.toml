@@ -1,0 +1,6 @@
+[package]
+name = "i2cdummy"
+version = "0.1.0"
+authors = ["niedzwiedzstudio <niedzwiedzwo@gmail.com>"]
+
+[dependencies]

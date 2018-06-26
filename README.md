@@ -1,0 +1,1 @@
+Dummy i2c implementation in Rust programming language. It's simply a toy project to help visualise how the communication of Master and Slave devices might look like. Arduino UNO and 128x64 i2c OLED display are used for this example, but general idea stays the same.
